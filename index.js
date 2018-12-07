@@ -45,5 +45,3 @@ app.get('/:name', function (request, response) {
 app.listen(app.get('port'), function () {
     console.log('node-tgz-downloader on port ' + app.get('port'));
 });
-
-exports.handler = async(event) => {};
