@@ -1,6 +1,8 @@
 {
     "name": "node-tgz-downloader",
     "dependencies": {
+        "body-parser": "^1.18.3",
+        "express": "^4.16.4",
         "fs-extra": "^7.0.1",
         "node-tgz-downloader": "^0.1.6",
         "zip-folder": "^1.0.0"

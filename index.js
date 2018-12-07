@@ -1,9 +1,19 @@
 let zipFolder = require('zip-folder');
-var fs = require('fs-extra');
+let fs = require('fs-extra');
 let spawn = require('child_process').spawn;
-exports.handler = async(event) => {
+let express = require("express");
+let bodyParser = require("body-parser");
 
-    let packageName = event['queryStringParameters']['package'];
+let app = express();
+
+app.set('port', (process.env.PORT || 5000));
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use(express.static('public'));
+
+app.get('/:name', function (request, response) {
+    let packageName = request["params"].name;
     let command = `package ${packageName}`;
 
     let ls = spawn('download-tgz', command.split(' '), {
@@ -25,13 +35,15 @@ exports.handler = async(event) => {
                 } else {
                     fs.removeSync("./tarballs");
                     console.log('EXCELLENT');
-                    const response = {
-                        statusCode: 200,
-                        body: JSON.stringify(event['queryStringParameters']['package'])
-                    };
-                    return response;
+                    response.sendFile(__dirname + `\\${packageName}.zip`);
                 }
             });
         }
     });
-};
+});
+
+app.listen(app.get('port'), function () {
+    console.log('node-tgz-downloader on port ' + app.get('port'));
+});
+
+exports.handler = async(event) => {};
